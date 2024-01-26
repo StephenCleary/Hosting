@@ -118,9 +118,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All"/>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Nito.Hosting.Wpf\Nito.Hosting.Wpf.csproj">
       <Project>{afab2433-f924-4f5a-8d1a-f9427f0ecf45}</Project>
       <Name>Nito.Hosting.Wpf</Name>

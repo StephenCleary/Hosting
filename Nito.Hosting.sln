@@ -3,13 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{F599DAEB-95C3-46D8-90DD-72B6B9D39FF9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nito.Hosting.Wpf", "src\Nito.Hosting.Wpf\Nito.Hosting.Wpf.csproj", "{AFAB2433-F924-4F5A-8D1A-F9427F0ECF45}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp1", "examples\WpfApp1\WpfApp1.csproj", "{3EDB4A84-592B-41B6-B329-A9E1752EA4CB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp2 (Desktop)", "examples\WpfApp2 (Desktop)\WpfApp2 (Desktop).csproj", "{D867A113-F492-4DD1-95ED-1510D50715CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,21 +15,9 @@ Global
 		{AFAB2433-F924-4F5A-8D1A-F9427F0ECF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFAB2433-F924-4F5A-8D1A-F9427F0ECF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFAB2433-F924-4F5A-8D1A-F9427F0ECF45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EDB4A84-592B-41B6-B329-A9E1752EA4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EDB4A84-592B-41B6-B329-A9E1752EA4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EDB4A84-592B-41B6-B329-A9E1752EA4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EDB4A84-592B-41B6-B329-A9E1752EA4CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D867A113-F492-4DD1-95ED-1510D50715CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D867A113-F492-4DD1-95ED-1510D50715CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D867A113-F492-4DD1-95ED-1510D50715CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D867A113-F492-4DD1-95ED-1510D50715CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{3EDB4A84-592B-41B6-B329-A9E1752EA4CB} = {F599DAEB-95C3-46D8-90DD-72B6B9D39FF9}
-		{D867A113-F492-4DD1-95ED-1510D50715CC} = {F599DAEB-95C3-46D8-90DD-72B6B9D39FF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {280643CD-677F-4641-B836-DACA2BD99997}
