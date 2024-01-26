@@ -5,15 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ApplicationDefinition Remove="App.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Include="App.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />

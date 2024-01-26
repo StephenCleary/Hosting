@@ -1,0 +1,56 @@
+<Project>
+  <!--
+      Directory.Build.props (src) v2.3
+      - 2.3:
+        - Remove old Coverlet workaround for .NET SDKs < 3.1.300
+        - Remove source link settings for .NET SDKs < 8
+        - Add trim/single-file/AOT checks.
+        - Add repo-scope README.md to package.
+      - 2.2 Migrate from FxCopAnalyzers to NetAnalyzers.
+      - 2.1 Specify LangVersion (required by Nullable for most libraries).
+      - 2.0 Move project-specific properties to `project.props`.
+      - 1.1 Remove workaround for .NET SDK bug that was necesary for coverlet to work.
+      - 1.0 Initial release.
+  -->
+
+  <Import Project="$(MSBuildThisFileDirectory)project.props" />
+
+  <!-- Project quality settings -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <ContinuousIntegrationBuild Condition="'$(CI)'=='true'">true</ContinuousIntegrationBuild>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+  </PropertyGroup>
+
+  <!-- Package settings -->
+  <PropertyGroup>
+    <PackageProjectUrl>https://github.com/$(GITHUB_REPOSITORY)</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <!-- Icon file -->
+  <PropertyGroup>
+    <PackageIcon>icon.png</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\icon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <!-- Include reference assemblies -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <!-- Versioning -->
+  <PropertyGroup Condition="'$(CI)'!='true'">
+    <VersionSuffix>dev</VersionSuffix>
+  </PropertyGroup>
+</Project>

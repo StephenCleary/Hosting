@@ -5,15 +5,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Nito.Hosting.Wpf;
 
+/// <summary>
+/// Provides an <see cref="IHostLifetime"/> implementation that manages the lifetime of a WPF <see cref="Application"/>.
+/// The <typeparamref name="TApplication"/> instance is created during startup and shut down when the host is stopped.
+/// </summary>
+/// <typeparam name="TApplication">The type of WPF <see cref="Application"/> to manage.</typeparam>
 public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 	where TApplication : Application
 {
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WpfApplicationLifetime{TApplication}"/> class.
+	/// </summary>
 	public WpfApplicationLifetime(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider)
 	{
 		_applicationLifetime = applicationLifetime;
 		_serviceProvider = serviceProvider;
 	}
 
+	/// <inheritdoc />
 	public async Task WaitForStartAsync(CancellationToken cancellationToken)
 	{
 		var ready = new TaskCompletionSource<TApplication>();
@@ -45,9 +54,10 @@ public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 		thread.Name = "Main WPF Thread";
 		thread.SetApartmentState(ApartmentState.STA);
 		thread.Start();
-		_application = await ready.Task;
+		_application = await ready.Task.ConfigureAwait(false);
 	}
 
+	/// <inheritdoc />
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
 		_ = _application ?? throw new InvalidOperationException($"{nameof(StopAsync)} invoked before {nameof(WaitForStartAsync)} completed.");
