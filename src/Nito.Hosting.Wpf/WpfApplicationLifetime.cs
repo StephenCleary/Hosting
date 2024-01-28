@@ -1,6 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Extensions.Hosting;
-using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Nito.Hosting.Wpf;
@@ -32,7 +32,6 @@ public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 			try
 			{
 				var app = _serviceProvider.GetRequiredService<TApplication>();
-				(app as IComponentConnector)?.InitializeComponent();
 				app.Startup += (_, _) =>
 				{
 					ready.TrySetResult(app);
@@ -64,6 +63,11 @@ public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 		_application.Dispatcher.BeginInvoke(() => _application.Shutdown());
 		return _applicationExited.Task;
 	}
+
+	/// <summary>
+	/// Retrieves the dispatcher for the main WPF thread.
+	/// </summary>
+	public Dispatcher Dispatcher => _application?.Dispatcher ?? throw new InvalidOperationException($"{nameof(Dispatcher)} invoked before {nameof(WaitForStartAsync)} completed.");
 
 	private readonly IHostApplicationLifetime _applicationLifetime;
 	private readonly IServiceProvider _serviceProvider;

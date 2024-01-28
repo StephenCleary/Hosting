@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.Hosting.Wpf;
 
@@ -15,9 +16,13 @@ public static class WpfApplicationLifetimeHostBuilderExtensions
 	/// Also configures the <typeparamref name="TApplication"/> as a singleton.
 	/// </summary>
 	/// <typeparam name="TApplication">The type of WPF <see cref="Application"/> to manage.</typeparam>
+#if NET472
 	public static IServiceCollection AddWpfApplication<TApplication>(this IServiceCollection services)
+#else
+	public static IServiceCollection AddWpfApplication<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TApplication>(this IServiceCollection services)
+#endif
 		where TApplication : Application =>
 		services
-			.AddSingleton<TApplication>()
+			.AddSingleton(MarkupUtility.CreateInstance<TApplication>())
 			.AddSingleton<IHostLifetime, WpfApplicationLifetime<TApplication>>();
 }
