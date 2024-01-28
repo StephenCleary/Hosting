@@ -7,16 +7,16 @@ namespace Nito.Hosting.Wpf;
 /// <summary>
 /// Provides utilities for markup-related types.
 /// </summary>
-public static class MarkupUtility
+public static class WpfUtility
 {
 	/// <summary>
 	/// Returns a factory method for the specified type that will call <see cref="IComponentConnector.InitializeComponent"/> after creating the instance.
 	/// </summary>
 	/// <typeparam name="T">The markup type to be created.</typeparam>
 #if NET472
-	public static Func<IServiceProvider, T> CreateInstance<T>()
+	public static Func<IServiceProvider, T> CreateApplicationInstance<T>()
 #else
-	public static Func<IServiceProvider, T> CreateInstance<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>()
+	public static Func<IServiceProvider, T> CreateApplicationInstance<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>()
 #endif
 		where T : class =>
 		provider =>
