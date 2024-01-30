@@ -23,6 +23,6 @@ public static class WpfApplicationLifetimeHostBuilderExtensions
 #endif
 		where TApplication : Application =>
 		services
-			.AddSingleton(WpfUtility.CreateApplicationInstance<TApplication>())
+			.AddSingleton(WpfApplicationUtility.CreateApplicationInstance<TApplication>())
 			.AddSingleton<IHostLifetime, WpfApplicationLifetime<TApplication>>();
 }

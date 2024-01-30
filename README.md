@@ -36,6 +36,24 @@ So, your application can exit the WPF application normally (e.g., `Application.C
 You can modify the `Main` method to:
 
 - Register additional services for DI.
-- Capture the host and/or its `IServiceProvider` to act as a service locator.
+- Save the host and/or its `IServiceProvider` to act as a service locator.
 
-There is nothing fancy like automatically injecting ViewModels into Views, or Views for ViewModels. The exact way you use DI is up to you; this project just provides the .NET Generic Host with a lifetime compatible with UI applications.
+This project provides nothing fancy like automatically injecting ViewModels into Views, or Views for ViewModels. The exact way you use DI is up to you; this project just provides the .NET Generic Host with a lifetime compatible with UI applications.
+
+## Getting the Main Thread and its Dispatcher
+
+`AddWpfApplication<App>` registers `App` as a singleton.
+
+**After the host has started,** you can get to the main thread's dispatcher from that:
+
+```C#
+Dispatcher dispatcher = host.Services.GetRequiredService<App>().Dispatcher;
+```
+
+Similarly, you can get to the main UI thread from that dispatcher:
+
+```C#
+Thread thread = host.Services.GetRequiredService<App>().Dispatcher.Thread;
+```
+
+Be sure not to call `GetRequiredService<App>()` until after the host has started. Otherwise, the `App` instance will be created on the wrong thread and Bad Things will happen.

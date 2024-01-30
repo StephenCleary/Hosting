@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Nito.Hosting.Wpf;
 
 /// <summary>
-/// Provides utilities for WPF types.
+/// Provides utilities for WPF application types.
 /// </summary>
-public static class WpfUtility
+public static class WpfApplicationUtility
 {
 	/// <summary>
 	/// Returns a factory method for the specified type that will call <see cref="IComponentConnector.InitializeComponent"/> after creating the instance.
