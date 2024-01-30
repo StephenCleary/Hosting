@@ -57,3 +57,32 @@ Thread thread = host.Services.GetRequiredService<App>().Dispatcher.Thread;
 ```
 
 Be sure not to call `GetRequiredService<App>()` until after the host has started. Otherwise, the `App` instance will be created on the wrong thread and Bad Things will happen.
+
+## Advanced Startup
+
+`AddWpfApplication<App>` does two things:
+- Sets the host lifetime to an instance of `WpfApplicationLifetime<App>`.
+- Registers `App` as a singleton instance, creating the instance and then calling `InitializeComponent` to load the `App.xaml`.
+
+If you need to customize the creation of your `App` instance, you can do both of the above yourself:
+
+```C#
+// Note: [STAThread] is not used!
+private static void Main()
+{
+	var hostBuilder = Host.CreateApplicationBuilder();
+	hostBuilder.Services.AddSingleton<IHostLifetime, WpfApplicationLifetime<App>>();
+	hostBuilder.Services.AddSingleton<App>(provider =>
+	{
+		// Note: this code runs on the main WPF UI thread.
+		// Add any custom initialization work to this method.
+		var app = new App();
+		app.InitializeComponent();
+		return app;
+
+		// Do not call App.Run() - WpfApplicationLifetime<App> will call App.Run().
+	});
+	var host = hostBuilder.Build();
+	host.Run();
+}
+```
