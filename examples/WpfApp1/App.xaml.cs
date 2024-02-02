@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Microsoft.Extensions.Hosting;
 
 namespace WpfApp1
@@ -10,12 +11,13 @@ namespace WpfApp1
 	{
 		public static IHost AppHost { get; private set; } = null!;
 
+		[STAThread]
 		private static void Main()
 		{
 			var hostBuilder = Host.CreateApplicationBuilder();
 			hostBuilder.Services.AddWpfApplication<App>();
 			AppHost = hostBuilder.Build();
-			AppHost.Run();
+			AppHost.RunWpfApplication<App>();
 		}
 	}
 }

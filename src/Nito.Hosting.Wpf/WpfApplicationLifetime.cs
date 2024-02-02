@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Nito.Hosting.Wpf;
 
@@ -15,57 +14,34 @@ public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WpfApplicationLifetime{TApplication}"/> class.
 	/// </summary>
-	public WpfApplicationLifetime(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider)
+	public WpfApplicationLifetime(IHostApplicationLifetime applicationLifetime, TApplication application)
 	{
 		_applicationLifetime = applicationLifetime;
-		_serviceProvider = serviceProvider;
+		_application = application;
 	}
 
 	/// <inheritdoc />
 	public async Task WaitForStartAsync(CancellationToken cancellationToken)
 	{
-		var ready = new TaskCompletionSource<TApplication>();
-		var thread = new Thread(() =>
+		var ready = new TaskCompletionSource<object>();
+		using var registration = cancellationToken.Register(() => ready.TrySetCanceled(cancellationToken));
+		_application.Startup += (_, _) => ready.TrySetResult(null!);
+		_application.Exit += (_, _) =>
 		{
-			using var registration = cancellationToken.Register(() => ready.TrySetCanceled(cancellationToken));
-			try
-			{
-				var app = _serviceProvider.GetRequiredService<TApplication>();
-				app.Startup += (_, _) =>
-				{
-					ready.TrySetResult(app);
-				};
-				app.Exit += (_, _) =>
-				{
-					_applicationExited.TrySetResult(null!);
-					_applicationLifetime.StopApplication();
-				};
-				registration.Dispose();
-				Environment.ExitCode = app.Run();
-			}
-			catch (Exception ex)
-			{
-				if (ready.TrySetException(ex))
-					return;
-				throw;
-			}
-		});
-		thread.Name = "Main WPF Thread";
-		thread.SetApartmentState(ApartmentState.STA);
-		thread.Start();
-		_application = await ready.Task.ConfigureAwait(false);
+			_applicationExited.TrySetResult(null!);
+			_applicationLifetime.StopApplication();
+		};
+		await ready.Task.ConfigureAwait(false);
 	}
 
 	/// <inheritdoc />
 	public Task StopAsync(CancellationToken cancellationToken)
 	{
-		_ = _application ?? throw new InvalidOperationException($"{nameof(StopAsync)} invoked before {nameof(WaitForStartAsync)} completed.");
 		_application.Dispatcher.BeginInvoke(() => _application.Shutdown());
 		return _applicationExited.Task;
 	}
 
 	private readonly IHostApplicationLifetime _applicationLifetime;
-	private readonly IServiceProvider _serviceProvider;
 	private readonly TaskCompletionSource<object> _applicationExited = new();
-	private TApplication? _application;
+	private readonly TApplication _application;
 }

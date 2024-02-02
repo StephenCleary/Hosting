@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.Hosting.Wpf;
@@ -9,7 +10,7 @@ namespace Microsoft.Extensions.Hosting;
 /// <summary>
 /// Extension methods for configuring WPF application lifetimes.
 /// </summary>
-public static class WpfApplicationLifetimeHostBuilderExtensions
+public static class WpfApplicationLifetimeExtensions
 {
 	/// <summary>
 	/// Configures the host to use WPF application lifetime.
@@ -35,4 +36,18 @@ public static class WpfApplicationLifetimeHostBuilderExtensions
 				return instance;
 			})
 			.AddSingleton<IHostLifetime, WpfApplicationLifetime<TApplication>>();
+
+	/// <summary>
+	/// Runs the WPF application along with the .NET generic host.
+	/// </summary>
+	/// <typeparam name="TApplication">The type of the WPF <see cref="Application"/> to run.</typeparam>
+	public static void RunWpfApplication<TApplication>(this IHost host)
+		where TApplication : Application
+	{
+		_ = host ?? throw new ArgumentNullException(nameof(host));
+		var application = host.Services.GetRequiredService<TApplication>();
+		var hostTask = host.RunAsync();
+		Environment.ExitCode = application.Run();
+		hostTask.GetAwaiter().GetResult();
+	}
 }
