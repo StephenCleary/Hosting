@@ -25,9 +25,9 @@ public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 	public async Task WaitForStartAsync(CancellationToken cancellationToken)
 	{
 		var ready = new TaskCompletionSource<TApplication>();
-		cancellationToken.Register(() => ready.TrySetCanceled(cancellationToken));
 		var thread = new Thread(() =>
 		{
+			using var registration = cancellationToken.Register(() => ready.TrySetCanceled(cancellationToken));
 			try
 			{
 				var app = _serviceProvider.GetRequiredService<TApplication>();
@@ -40,6 +40,7 @@ public sealed class WpfApplicationLifetime<TApplication> : IHostLifetime
 					_applicationExited.TrySetResult(null!);
 					_applicationLifetime.StopApplication();
 				};
+				registration.Dispose();
 				Environment.ExitCode = app.Run();
 			}
 			catch (Exception ex)
