@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.Hosting.Wpf;
 
@@ -23,6 +23,16 @@ public static class WpfApplicationLifetimeHostBuilderExtensions
 #endif
 		where TApplication : Application =>
 		services
-			.AddSingleton(WpfApplicationUtility.CreateApplicationInstance<TApplication>())
+			.AddSingleton(provider =>
+			{
+				// Most markup-related types invoke InitializeComponent from their constructor.
+				// For some completely unknown reason, WPF application components normally do *not*. For those components, you must explicitly call InitializeComponent after construction.
+				// Who knows why. It's just an annoying inconsistency.
+				// Naturally, InitializeComponent *must* be called. And must *not* be called twice. And there's no way to tell whether it's been called.
+				// Sigh.
+				var instance = ActivatorUtilities.CreateInstance<TApplication>(provider);
+				(instance as IComponentConnector)?.InitializeComponent();
+				return instance;
+			})
 			.AddSingleton<IHostLifetime, WpfApplicationLifetime<TApplication>>();
 }
