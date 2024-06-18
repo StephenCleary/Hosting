@@ -1,12 +1,12 @@
 ![Logo](src/icon.png)
 
-# Hosting [![Build status](https://github.com/StephenCleary/Hosting/workflows/Build/badge.svg)](https://github.com/StephenCleary/Hosting/actions?query=workflow%3ABuild) [![codecov](https://codecov.io/gh/StephenCleary/Hosting/branch/main/graph/badge.svg)](https://codecov.io/gh/StephenCleary/Hosting) [![NuGet version](https://badge.fury.io/nu/Nito.Collections.Hosting.svg)](https://www.nuget.org/packages/Nito.Collections.Hosting) [![API docs](https://img.shields.io/badge/API-FuGet-blue.svg)](https://www.fuget.org/packages/Nito.Collections.Hosting)
+# Hosting [![Build status](https://github.com/StephenCleary/Hosting/workflows/Build/badge.svg)](https://github.com/StephenCleary/Hosting/actions?query=workflow%3ABuild) [![codecov](https://codecov.io/gh/StephenCleary/Hosting/branch/main/graph/badge.svg)](https://codecov.io/gh/StephenCleary/Hosting) [![NuGet version](https://badge.fury.io/nu/Nito.Hosting.Wpf.svg)](https://www.nuget.org/packages/Nito.Hosting.Wpf) [![API docs](https://img.shields.io/badge/API-FuGet-blue.svg)](https://www.fuget.org/packages/Nito.Hosting.Wpf)
 
 .NET Generic Host support for UI applications.
 
 ## Usage (WPF)
 
-Afer installing the [NuGet package](https://www.nuget.org/packages/Nito.Collections.Hosting), add a `Main` method to your application component (commonly called `App.xaml`):
+Afer installing the [NuGet package](https://www.nuget.org/packages/Nito.Hosting.Wpf), add a `Main` method to your application component (commonly called `App.xaml`):
 
 ```C#
 [STAThread]
